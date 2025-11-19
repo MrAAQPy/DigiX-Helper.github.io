@@ -6,22 +6,75 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>DigiX — Official</title>
     <link rel="stylesheet" href="css/sytle.css">
-    <link rel="icon" type="image/png" href="img/favicon DigiX site.png">
+    <link rel="icon" type="image/png" href="img/favicon.png">
 </head>
 
 <body>
     <header>
-        <h1>مجموعه DigiX | دیجیکس</h1>
-        <nav>
-            <ul>
-                <li><a href="#about">درباره</a></li>
-                <li><a href="#news">اخبار</a></li>
-                <li><a href="#subs">زیر مجموعه‌ها</a></li>
-                <li><a href="#team">تیم توسعه</a></li>
-            </ul>
-        </nav>
+        <div class="header-container">
+            <h1>مجموعه DigiX | دیجیکس</h1>
+            <div class="menu-toggle" id="menuToggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <nav id="mainNav">
+                <ul>
+                    <li><a href="#about">درباره</a></li>
+                    <li><a href="#news">اخبار</a></li>
+                    <li><a href="#subs">زیر مجموعه‌ها</a></li>
+                    <li><a href="#team">تیم توسعه</a></li>
+                </ul>
+            </nav>
+        </div>
     </header>
 
+    <div class="overlay" id="overlay"></div>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const menuToggle = document.getElementById('menuToggle');
+            const mainNav = document.getElementById('mainNav');
+            const overlay = document.getElementById('overlay');
+
+            menuToggle.addEventListener('click', function () {
+                this.classList.toggle('active');
+                mainNav.classList.toggle('active');
+                overlay.classList.toggle('active');
+
+                document.body.style.overflow = mainNav.classList.contains('active') ? 'hidden' : '';
+            });
+
+            overlay.addEventListener('click', function () {
+                menuToggle.classList.remove('active');
+                mainNav.classList.remove('active');
+                this.classList.remove('active');
+                document.body.style.overflow = '';
+            });
+
+            const navLinks = document.querySelectorAll('nav a');
+            navLinks.forEach(link => {
+                link.addEventListener('click', function () {
+                    if (window.innerWidth <= 768) {
+                        menuToggle.classList.remove('active');
+                        mainNav.classList.remove('active');
+                        overlay.classList.remove('active');
+                        document.body.style.overflow = '';
+                    }
+                });
+            });
+
+            window.addEventListener('resize', function () {
+                if (window.innerWidth > 768) {
+                    menuToggle.classList.remove('active');
+                    mainNav.classList.remove('active');
+                    overlay.classList.remove('active');
+                    document.body.style.overflow = '';
+                }
+            });
+        });
+    </script>
     <main>
         <section id="about">
             <h2>درباره مجموعه <strong>دیجیکس | DigiX</strong></h2>
@@ -185,6 +238,13 @@
                     contact: "https://ble.ir/the_retro"
                 },
                 {
+                    img: "img/Developers/CodeWizaard.jpg",
+                    alt: "CodeWizaard",
+                    name: "CodeWizaard",
+                    lastname: "Developer",
+                    contact: "https://ble.ir/codewizaard"
+                }, 
+                {
                     img: "img/Developers/arad.jpg",
                     alt: "RJB",
                     name: "RJB",
@@ -215,7 +275,6 @@
                 });
             }
 
-            // Add horizontal scroll with mouse drag
             let isDown = false;
             let startX;
             let scrollLeft;

@@ -31,20 +31,12 @@ header {
     flex-direction: column;
     align-items: center;
     text-align: center;
-}
-
-header h1 {
-    margin: 0 0 20px 0;
-    width: 100%;
-    text-align: center;
+    position: relative;
 }
 
 nav ul {
-    margin: 0;
-    padding: 0;
     list-style: none;
     display: flex;
-    justify-content: center;
     gap: 35px;
 }
 
@@ -53,11 +45,159 @@ nav a {
     color: #ccc;
     font-size: 16px;
     transition: color 0.25s ease, transform 0.25s ease;
+    position: relative;
+    padding: 0.5rem 0;
 }
 
 nav a:hover {
     color: #fff;
     transform: translateY(-2px);
+}
+
+nav a::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: 0;
+    right: 0;
+    background-color: #4cc9f0;
+    transition: width 0.3s ease;
+}
+
+nav a:hover::after {
+    width: 100%;
+}
+
+.menu-toggle {
+    display: none;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 30px;
+    height: 21px;
+    cursor: pointer;
+    position: absolute;
+    left: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.menu-toggle span {
+    display: block;
+    height: 3px;
+    width: 100%;
+    background-color: #fff;
+    border-radius: 3px;
+    transition: all 0.3s ease;
+}
+
+@media (max-width: 768px) {
+    .menu-toggle {
+        display: flex;
+    }
+
+    nav {
+        position: fixed;
+        top: 0;
+        font-size: 2rem;
+        right: -100%;
+        width: 80%;
+        max-width: 25vh;
+        height: 100vh;
+        background: rgba(24, 24, 24, 0.95);
+        backdrop-filter: blur(15px);
+        transition: right 0.4s ease;
+        z-index: 999;
+        padding: 5rem 2rem 2rem;
+        box-shadow: -5px 0 25px rgba(0, 0, 0, 0.5);
+        border-left: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    nav.active {
+        right: 0;
+    }
+
+    nav ul {
+        flex-direction: column;
+        gap: 0;
+    }
+
+    nav li {
+        margin: 1rem 0;
+        opacity: 0;
+        transform: translateX(20px);
+        transition: all 0.4s ease;
+        background-color: #221f1f;
+        border-radius: 15px;
+    }
+
+    nav.active li {
+        opacity: 1;
+        transform: translateX(0);
+    }
+
+    nav.active li:nth-child(1) {
+        transition-delay: 0.1s;
+    }
+
+    nav.active li:nth-child(2) {
+        transition-delay: 0.2s;
+    }
+
+    nav.active li:nth-child(3) {
+        transition-delay: 0.3s;
+    }
+
+    nav.active li:nth-child(4) {
+        transition-delay: 0.4s;
+    }
+
+    nav a {
+        display: block;
+        padding: 1rem;
+        font-size: 1.1rem;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+        width: 150px;
+    }
+
+    nav a:hover {
+        background: rgba(18, 18, 19, 0.1);
+    }
+
+    nav a::after {
+        display: none;
+    }
+
+    .menu-toggle.active span:nth-child(1) {
+        transform: translateY(9px) rotate(45deg);
+    }
+
+    .menu-toggle.active span:nth-child(2) {
+        opacity: 0;
+    }
+
+    .menu-toggle.active span:nth-child(3) {
+        transform: translateY(-9px) rotate(-45deg);
+    }
+
+    .overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.7);
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.4s ease;
+        z-index: 998;
+    }
+
+    .overlay.active {
+        opacity: 1;
+        visibility: visible;
+    }
 }
 
 main {
@@ -82,7 +222,6 @@ h3 {
     padding-bottom: 8px;
 }
 
-/* FORM */
 form {
     display: grid;
     gap: 20px;
@@ -301,10 +440,28 @@ footer {
     gap: 20px;
     overflow-x: auto;
     padding: 20px 10px;
+    scroll-snap-type: x mandatory;
     scroll-behavior: smooth;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
+    -webkit-overflow-scrolling: touch;
 }
+
+.team-wrapper::-webkit-scrollbar {
+    height: 10px;
+}
+
+.team-wrapper::-webkit-scrollbar-track {
+    background: #0f0f0f;
+}
+
+.team-wrapper::-webkit-scrollbar-thumb {
+    background: #333;
+    border-radius: 10px;
+}
+
+.team-card {
+    scroll-snap-align: start;
+}
+
 
 .team-wrapper::-webkit-scrollbar {
     display: none;
@@ -408,34 +565,6 @@ footer {
     }
 }
 
-@media (max-width: 768px) {
-    #team {
-        padding: 40px 15px;
-    }
-
-    #team h2 {
-        font-size: 28px;
-    }
-
-    #team p {
-        font-size: 16px;
-    }
-
-    .team-card {
-        width: 170px;
-        padding: 20px 15px;
-    }
-
-    .team-card .profile-img {
-        width: 80px;
-        height: 80px;
-    }
-
-    .scroll-indicator {
-        display: none;
-    }
-}
-
 .contact a {
     display: inline-flex;
     align-items: center;
@@ -457,4 +586,213 @@ footer {
     filter: brightness(0) invert(1);
     transform: scale(1.18) translateY(-1px);
     filter: brightness(2) invert(1);
+}
+
+
+@media (max-width: 1024px) {
+    header {
+        padding: 20px;
+    }
+
+    nav ul {
+        gap: 25px;
+        flex-wrap: wrap;
+    }
+
+    main {
+        margin: 30px auto;
+        padding: 0 15px;
+    }
+
+    section {
+        padding: 20px;
+        margin-bottom: 40px;
+    }
+
+    .subs-wrapper {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 15px;
+    }
+
+    .notice-card {
+        min-width: 220px;
+        padding: 15px;
+    }
+
+    .team-card {
+        width: 160px;
+        padding: 12px;
+    }
+
+    .team-card .profile-img {
+        width: 70px;
+        height: 70px;
+    }
+}
+
+@media (max-width: 768px) {
+    header {
+        padding: 15px;
+    }
+
+    header h1 {
+        font-size: 24px;
+        margin-bottom: 15px;
+    }
+
+    nav ul {
+        gap: 15px;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    nav a {
+        font-size: 14px;
+    }
+
+    main {
+        margin: 20px auto;
+    }
+
+    section {
+        padding: 15px;
+        margin-bottom: 30px;
+    }
+
+    h1,
+    h2,
+    h3 {
+        font-size: 20px;
+    }
+
+    form {
+        gap: 15px;
+    }
+
+    input,
+    textarea,
+    select {
+        padding: 8px;
+        font-size: 13px;
+    }
+
+    button {
+        padding: 10px 15px;
+        font-size: 14px;
+    }
+
+    .subs-wrapper {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+
+    .subs-card {
+        padding: 15px;
+    }
+
+    .subs-img {
+        width: 50px;
+        height: 50px;
+    }
+
+    .notice-wrapper {
+        gap: 15px;
+    }
+
+    .notice-card {
+        min-width: 200px;
+        padding: 15px;
+    }
+
+    .team-card {
+        width: 140px;
+        padding: 10px;
+    }
+
+    .team-card .profile-img {
+        width: 60px;
+        height: 60px;
+    }
+
+    .team-card .name {
+        font-size: 16px;
+    }
+
+    .team-card .lastname {
+        font-size: 14px;
+    }
+
+    .team-card .contact {
+        font-size: 12px;
+    }
+
+    footer {
+        padding: 20px;
+        margin-top: 50px;
+    }
+}
+
+@media (max-width: 480px) {
+    header {
+        padding: 10px;
+    }
+
+    header h1 {
+        font-size: 20px;
+    }
+
+    nav ul {
+        gap: 10px;
+    }
+
+    main {
+        padding: 0 10px;
+    }
+
+    section {
+        padding: 10px;
+    }
+
+    .subs-card {
+        padding: 12px;
+    }
+
+    .notice-card {
+        min-width: 180px;
+        padding: 12px;
+    }
+
+    .team-card {
+        width: 130px;
+    }
+
+    .team-card .profile-img {
+        width: 55px;
+        height: 55px;
+    }
+
+    .scroll-indicator {
+        font-size: 12px;
+    }
+}
+
+@media (max-height: 500px) and (orientation: landscape) {
+    header {
+        padding: 10px 20px;
+    }
+
+    main {
+        margin: 20px auto;
+    }
+
+    section {
+        margin-bottom: 20px;
+        padding: 15px;
+    }
+}
+
+@media (min-width: 1400px) {
+    main {
+        max-width: 1300px;
+    }
 }
